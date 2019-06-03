@@ -1,0 +1,75 @@
+#include<bits/stdc++.h>
+#define MAX 200
+using namespace std;
+typedef struct Node{
+	int data;
+	Node *lc,*rc;	
+}*Tree;
+
+struct Stack{
+	Tree data[MAX];
+	int point;
+};
+struct Queue{
+	Tree data[MAX];
+	int f,r;
+};
+
+Tree creat(){
+	Tree T;
+	int a;
+	scanf("%d",&a);
+	if(a!=0)
+	{	
+		T=(Tree)malloc(sizeof(Node));
+		T->data=a;
+		T->lc=creat();
+		T->rc=creat();
+	}
+	else {
+		T=NULL;
+	}
+	return T;
+}
+
+
+void xxbl(Tree T)
+{
+	if(T!=NULL){
+		printf("%d",T->data);
+		xxbl(T->lc);
+		xxbl(T->rc);
+	}
+	else{return;}
+}
+
+void xxbl_No_digui(Tree root)
+{
+	Tree T;
+	T=root;
+	Stack temp;
+	temp.point=-1;
+	temp.data[++temp.point]=T;
+	while(temp.point!=-1)
+	{
+		printf("%d ",T->data);
+		if(T->rc!=NULL)
+			temp.data[++temp.point]=T->rc;
+		if(T->lc==NULL)
+			T=temp.data[temp.point--];
+		else
+			T=T->lc;
+	} 
+}
+
+int main()
+{
+	Tree T;
+	printf("前序输入，以0结尾：\n");
+	T=creat();
+	xxbl(T);
+	cout<<endl;
+	xxbl_No_digui(T);
+//	hxbl(T);
+	return 0;
+}
