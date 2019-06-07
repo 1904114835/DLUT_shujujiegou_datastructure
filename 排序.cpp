@@ -263,10 +263,10 @@ void HeapAdjust(int a[],int s,int m)
 	a[s]=a[0];
 }
 
-void duiPaixu(int a[],int first,int mid,int n)//先构建一个大顶堆 
+void duiPaixu(int a[],int first,int mid,int n) 
 {
 	int i,j,k;
-	for(i=mid;i>0;i--)
+	for(i=mid;i>0;i--)//先构建一个大顶堆
 		HeapAdjust(a,i,n);
 	for(i=n;i>1;--i) //n-1趟堆排序
 	{
@@ -287,8 +287,8 @@ int main()//sqList??不存在的，lenth直接拿n存了
 	a[0]=0;
 	for(i=1;i<=n;i++)
 	{
-		//a[i]=rand()%100;
-		scanf("%d",&a[i]);
+		a[i]=rand()%100;//随机生成数组 
+		//scanf("%d",&a[i]);
 	}
 	read(a,n);
 	printf("\n\n");
