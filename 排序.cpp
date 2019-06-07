@@ -1,8 +1,7 @@
 #include<bits/stdc++.h>
 #define MAX 100
 using namespace std;
-
-
+static	int a[MAX];
 struct Stack{
 	int data[MAX];
 	int top;
@@ -170,14 +169,117 @@ void jsPaixu(int a[],int n)
 	}
 }
 
-void duiPaixu(int a[],int n)
+
+void merge(int a[], int start, int mid, int end)
 {
-	
-	
+    int *tmp = (int *)malloc((end-start+1)*sizeof(int));    // tmp是汇总2个有序区的临时区域
+    int i = start;            // 第1个有序区的索引
+    int j = mid + 1;        // 第2个有序区的索引
+    int k = 0;                // 临时区域的索引
+
+    while(i <= mid && j <= end)
+    {
+        if (a[i] <= a[j])
+            tmp[k++] = a[i++];
+        else
+            tmp[k++] = a[j++];
+    }
+
+    while(i <= mid)
+        tmp[k++] = a[i++];
+
+    while(j <= end)
+        tmp[k++] = a[j++];
+
+    // 将排序后的元素，全部都整合到数组a中。
+    for (i = 0; i < k; i++)
+        a[start + i] = tmp[i];
+
+    free(tmp);
 }
+
+
+/*
+ * 对数组a做若干次合并：数组a的总长度为len，将它分为若干个长度为gap的子数组；
+ *             将"每2个相邻的子数组" 进行合并排序。
+ *
+ * 参数说明：
+ *     a -- 待排序的数组
+ *     len -- 数组的长度
+ *     gap -- 子数组的长度
+ */
+void merge_groups(int a[], int len, int gap)
+{
+    int i;
+    int twolen = 2 * gap;    // 两个相邻的子数组的长度
+
+    // 将"每2个相邻的子数组" 进行合并排序。
+    for(i = 1; i+2*gap-1 <=len; i+=(2*gap))
+    {
+        merge(a, i, i+gap-1, i+2*gap-1);
+    }
+
+    // 若 i+gap-1 < len-1，则剩余一个子数组没有配对。
+    // 将该子数组合并到已排序的数组中。
+    if ( i+gap-1 <=len-1)
+    {
+        merge(a, i, i + gap - 1, len - 1);
+    }
+}
+
+/*
+ * 归并排序(从下往上)
+ *
+ * 参数说明：
+ *     a -- 待排序的数组
+ *     len -- 数组的长度
+ */
+void merge_sort(int a[], int len)
+{
+    int n;
+
+    if (a==NULL || len<=0)
+        return ;
+
+    for(n = 1; n <= len; n*=2)
+        merge_groups(a, len, n);
+}
+
+void HeapAdjust(int a[],int s,int m)
+{
+	int j;
+	a[0]=a[s];
+	for (j=2*s;j<=m;j=j*2)
+	{ 
+		if(j<m&&a[j]< a[j+1])
+			++j;
+		if(a[0]>=a[j])
+			break;
+			
+		
+		a[s]=a[j];
+		s=j;
+	}
+	a[s]=a[0];
+}
+
+void duiPaixu(int a[],int first,int mid,int n)//先构建一个大顶堆 
+{
+	int i,j,k;
+	for(i=mid;i>0;i--)
+		HeapAdjust(a,i,n);
+	for(i=n;i>1;--i) //n-1趟堆排序
+	{
+		swap(a[i],a[1]);
+		HeapAdjust(a,1,i-1);
+	}
+}
+//
+//8 25 56 49 78 11 65 41 36
+
+
 int main()//sqList??不存在的，lenth直接拿n存了 
 {/*--------------数组下标从1开始，0留给哨兵项---------------*/
-	int a[MAX];
 	int i,j,k,n;
 	srand((unsigned)time(NULL)); 
 	printf("请输入数组长度：");
@@ -185,8 +287,8 @@ int main()//sqList??不存在的，lenth直接拿n存了
 	a[0]=0;
 	for(i=1;i<=n;i++)
 	{
-		a[i]=rand()%100;
-		//scanf("%d",&a[i]);
+		//a[i]=rand()%100;
+		scanf("%d",&a[i]);
 	}
 	read(a,n);
 	printf("\n\n");
@@ -197,7 +299,8 @@ int main()//sqList??不存在的，lenth直接拿n存了
 	//kuaiPai_one_direct(a,1,n);//快排（算法导论版） 
 	//jdXuanze(a,n);//简单选择
 	//jsPaixu(a,n);//基数排序
-	duiPaixu(a,n);//堆排序 
+	//merge_sort(a,n);//归并排序，我抄的，好像会出错，等会看。
+	duiPaixu(a,1,n/2,n);//堆排序  
 	read(a,n);
 	return 0;
 }
