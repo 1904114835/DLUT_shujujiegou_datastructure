@@ -245,18 +245,17 @@ void merge_sort(int a[], int len)
         merge_groups(a, len, n);
 }
 
-void HeapAdjust(int a[],int s,int m)
+void HeapAdjust(int a[],int s,int n)
 {
 	int j;
 	a[0]=a[s];
-	for (j=2*s;j<=m;j=j*2)
+	for (j=2*s+1;j<=n;j=j*2+1)
 	{ 
-		if(j<m&&a[j]< a[j+1])
-			++j;
+		if(j<=n&&a[j-1]>a[j])
+			--j;
 		if(a[0]>=a[j])
 			break;
 			
-		
 		a[s]=a[j];
 		s=j;
 	}
