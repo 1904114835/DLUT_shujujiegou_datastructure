@@ -140,7 +140,7 @@ void lb_bfs(Graph G)
 
 void jz_print(juzhen_Graph jz_G) 
 {
-	printf("邻接矩阵表示法：\n");
+	printf("\n邻接矩阵表示法：\n");
 	int i,j;
 	for(i=0; i<jz_G->vexnum; i++) 
 	{
@@ -158,7 +158,7 @@ int minclosedge(EdgeType closedge[ ])
 	int min,j,k;
 	min=MAXEDGE;
 	k=-1;
-	for(j=0;j<G.vexnum;j++)
+	for(j=0;j<G->vexnum;j++)
 		if (closedge[j]. lowcost !=0&&closedge[j]. lowcost<min)
 		{
 			min=closedge[j]. lowcost;
@@ -171,37 +171,37 @@ void prim(AGraphs G,int u)
 {
 	int i,j,k;
 	EdgeType closedge[MAX];
-	for(j=0; j<G.vexnum; j++)
+	for(j=0; j<G->vexnum; j++)
 	{
 		closedge[j]. adjvex=u;
-		closedge[j]. lowcost=G.arcs[u][j];
+		closedge[j]. lowcost=G->arcs[u][j];
 	}
 	closedge[u]. lowcost=0;
-	for(i=1; i<G.vexnum; i++)
+	for(i=1; i<G->vexnum; i++)
 	{
 		k=minclosedge(closedge);
 		printf(“(%d,%d)”, closedge[k]. adjvex,k);
 		closedge[k]. lowcost=0;
-		for(j=0; j<G.venum; j++)
-			if(G.arcs[k][j]< closedge[j]. lowcost)
+		for(j=0; j<G->venum; j++)
+			if(G->arcs[k][j]< closedge[j]. lowcost)
 			{
-				closedge[j]. lowcost= G.arcs[k][j];
+				closedge[j]. lowcost= G->arcs[k][j];
 				closedge[j]. adjvex =k;
 			}
 	}
 }
 */
-void djstra(juzhen_G G,int k,int P[MAX][MAX], int D[ ]) 
+void djstra(juzhen_Graph G,int k,int P[MAX][MAX], int D[ ]) 
 {
 	int i,w, j,min;
 	int final[MAX]; 
-	for (i=0; i<G.vexnum; i ++) 
+	for (i=0; i<G->vexnum; i ++) 
 	{//对每个点初始化 
 		final[i]=0;//初始时所有点的最短路径都没有求出 
 		
-		D[i]=G.map[k][i];//初始化点到原点的距离，若有，为此值，若无，为无穷 
+		D[i]=G->map[k][i];//初始化点到原点的距离，若有，为此值，若无，为无穷 
 		
-		for(w=0; w<G.vexnum; w ++)//对与第i个点，初始化它路径上的点 
+		for(w=0; w<G->vexnum; w ++)//对与第i个点，初始化它路径上的点 
 			P[i][w]=0;
 	
 		if (D[i]<INFINITY)
@@ -212,27 +212,38 @@ void djstra(juzhen_G G,int k,int P[MAX][MAX], int D[ ])
 	}
 	D[k]=0;//原点到原点距离为0 
 	final[k]=1;//原点在已求出路径的点中 
-	for(i=1; i<G.vexnum; i ++) 
+	for(i=1; i<G->vexnum; i ++) 
 	{//只是为了重复n-1次。i无实际意义 
 		min=0x3f3f3f;
-		for (w=0; w<G.vexnum; w ++)
+		for (w=0; w<G->vexnum; w ++)
 			if (final[w]==0&&D[w]<min) 
 			{//对于不在集合S中的点，寻找路径最短 
 				j=w;//记录这个点 
 				min=D[w];
 			}
-	if(min== 0x3f3f3f) return;//说明从原点到任何点都没有路径，原点是孤立的点 
+	if(min== 0x3f3f3f){printf("\n该结点是孤立的点\n");return;}//说明从原点到任何点都没有路径，原点是孤立的点 
 		final[j]=1;//把刚刚记录的最短点置为1 
-		for(w=0; w<G.vexnum; w ++)//对于每个点 
-			if(final[w]==0&&(min+G.map[j][w]<D[w])) 
+		for(w=0; w<G->vexnum; w ++)//对于每个点 
+			if(final[w]==0&&(min+G->map[j][w]<D[w])) 
 			{//如果这个点不在S中，且刚刚新加入的点可以让路径更短，更新状态 
-				D[w]=min+G.map[j][w];
+				D[w]=min+G->map[j][w];
 				
 				for(int tempP=0;tempP<MAX;tempP++)//把路径更新为新点路径 
 					P[w][tempP]=P[j][tempP];
 				P[w][w]=1;//把自身也纳入路径 
 			}
 	}
+	
+	for(i=0;i<G->vexnum;i++)
+	{
+	 	printf("\n");
+		for(j=0;j<G->vexnum;j++)
+			printf("%d ",P[i][j]);
+	 } 
+
+	
+	
+	
 }
 int main() 
 {
@@ -247,7 +258,7 @@ int main()
 	jz_print(jz_G);
 
 	int P[MAX][MAX],D[MAX];
-	djstra(*jz_G,0,P,D);
+	djstra(jz_G,0,P,D);
 
 
 	return 0;
