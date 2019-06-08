@@ -14,6 +14,7 @@ void my_swap(int *a,int *b)
     *b=temp;
 }
 Link creatTcha(){
+	cout<<"请输入int链表，以空格隔开，以0结尾"<<endl;
 	int i=0;
 	Link L;
 	L=(Link)malloc(sizeof(Node));
@@ -38,6 +39,7 @@ Link creatTcha(){
 
 
 Link creatWcha(){
+	cout<<"请输入int链表，以空格隔开，以0结尾"<<endl;
 	int i;
 	Link L;
 	L=(Link)malloc(sizeof(Node));
@@ -66,6 +68,7 @@ Link creatWcha(){
 }
 void read(Link root)
 {
+
 	Node* temp;
 	temp=root->next;
 	while(true)
@@ -77,7 +80,8 @@ void read(Link root)
 	}
 	cout<<endl;
 }
-void charu(Link L){
+void charu(Link L){	
+	cout<<"插入一个数据"<<endl; 
 	int a;
 	scanf("%d",&a);
 	Link temp;
@@ -109,7 +113,46 @@ void sort_Link(Link L, Link end)    //将头指针为L，尾指针为end的链�
     sort_Link(pslow->next , NULL);        //右部分是比基准大的结点组成的链表
 }
 
+void Linksort(Link L,Link end)
+{
+	if(L==NULL)return ;
+	if(L==end)return ;
+	Link l1,l2;
+	l1=L;
+	l2=l1->next;
+	int temp;
+	while(l2!=end){
+		if(l2->data<L->data){
+			l1=l1->next;
+			temp=l2->data;
+			l2->data=l1->data ;
+			l1->data=temp;
+		}
+		l2=l2->next;
+	}
+			temp=l1->data;
+			l1->data=L->data ;
+			L->data=temp;
+			
+	Linksort(L,l1);
+	Linksort(l1->next,NULL);
+}
 
+
+void nizhi(Link L)
+{
+	Link p,q;
+	p=L->next;
+	L->next=NULL;
+	while(p)
+	{
+		q=p->next;
+		p->next=L->next;
+		L->next=p;
+		p=q;
+//		read(L);
+	}
+}
 
 int main()
 {
@@ -120,8 +163,11 @@ int main()
 	charu(L);
 	cout<<"插入后："<<endl;
 	read(L);
-	sort_Link(L,NULL);
+	Linksort(L->next,NULL);
 	cout<<"排序后："<<endl;
+	read(L);
+	cout<<"逆置后："<<endl;
+	nizhi(L);
 	read(L);
 	return 0;
 }
