@@ -190,7 +190,7 @@ void prim(AGraphs G,int u)
 			}
 	}
 }
-*/
+
 void djstra(juzhen_Graph G,int k,int P[MAX][MAX], int D[ ]) 
 {
 	int i,w, j,min;
@@ -240,11 +240,11 @@ void djstra(juzhen_Graph G,int k,int P[MAX][MAX], int D[ ])
 		for(j=0;j<G->vexnum;j++)
 			printf("%d ",P[i][j]);
 	 } 
-
-	
-	
-	
 }
+	
+	
+	
+*/
 int main() 
 {
 	int n;
@@ -256,10 +256,10 @@ int main()
 	lb_bfs(G);
 
 	jz_print(jz_G);
+//迪杰斯特拉没跑通，awsl
+//	int P[MAX][MAX],D[MAX];
+//	djstra(jz_G,0,P,D);
 
-	int P[MAX][MAX],D[MAX];
-	djstra(jz_G,0,P,D);
-
-
+//其实我普里姆都没跑，艹
 	return 0;
 }
