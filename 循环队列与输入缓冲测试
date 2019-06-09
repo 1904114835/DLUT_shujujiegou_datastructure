@@ -1,0 +1,53 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define MAX 10 
+struct que{
+	int data[MAX];
+	int f,r;
+	int maxsize=MAX;
+};
+
+bool panduan(que *q)
+{
+	if(q->f==q->r)
+	{
+		return true;
+	}
+	if(q->f==((q->r+1)%q->maxsize))
+	{
+		cout<<"队列已满\n";
+		return false;
+	}
+}
+
+void creat(que *q)
+{
+	int i,j,k,temp;
+	q->f=0;q->r=0;
+	while(true)
+	{
+		scanf("%d",&temp);
+		q->data[q->r++]=temp;
+		if(panduan(q))
+			return;
+		if(temp==-1)
+			break;
+	}
+}
+void read(que *q)
+{
+	int i;
+	for(i=q->f;i%MAX!=q->r;i++)
+		cout<<q->data[i]<<" ";
+	cout<<endl;
+}
+
+
+int main()
+{
+	que* q;
+	q=(que*)malloc(sizeof (que));
+	creat(q);
+	read(q);
+	return 0;
+}
